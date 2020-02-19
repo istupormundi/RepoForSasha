@@ -8,7 +8,7 @@ package task2;
  */
 
 public class Car {
-    double fuelConsumption;
+    //double fuelConsumption;
     double tankVolume = 50;
     double fuelLevelInTank;
     double x; // I consider x here as initial distance from OX
