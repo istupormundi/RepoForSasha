@@ -28,11 +28,11 @@ public class Car {
         return fuelLevelInTank;
     }
 
-    private void StopCarIfTankIsEmpty(){
+    private void stopCarIfTankIsEmpty(){
         System.out.println("STOPPED. FUEL TANK IS EMPTY");
     }
 
-    private void EstimateTrip(int km){
+    private void estimateTrip(int km){
         double delta = fuelLevelInTank - fuelConsumption * km;
         double requiredFuel = fuelConsumption * km;
         double expectedDistance = fuelLevelInTank / fuelConsumption;
@@ -48,13 +48,13 @@ public class Car {
 
     public void drive(int km){
         int currentRun = 0;
-        EstimateTrip(km);
+        estimateTrip(km);
 
         for (int i = 1; i <= km; i++){
             currentRun++;
             double fuel = calculateFuelLevelInTank(i);
             if (fuel <= 1){
-                StopCarIfTankIsEmpty();
+                stopCarIfTankIsEmpty();
                 System.out.println("W A R N I N G: Refill the tank");
                 break;
             }

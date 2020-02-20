@@ -1,7 +1,5 @@
 package task1;
 
-import task1.Point;
-
 public class Main {
 
     public static void main (String[] args){

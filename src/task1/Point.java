@@ -7,12 +7,6 @@ public class Point {
     private double x;
     private double y;
 
-    /*task1.Point(double this_x, double this_y){
-        x = this_x;
-        y = this_y;
-    }
-     */
-
     Point(double x, double y){
         this.x = x;
         this.y = y;
@@ -44,21 +38,14 @@ public class Point {
     }
 
     public final double distance(Point point){
-        double dist = Math.sqrt(square(point.x - this.getX()) + square(point.y - this.getY()));
-        return dist;
+        return Math.sqrt(square(point.x - this.getX()) + square(point.y - this.getY()));
     }
 
     public Point translate(double deltaX, double deltaY){
-
-        Point movedPoint = new Point(getX() + deltaX, getY() + deltaY);
-
-        return movedPoint;
+        return new Point(getX() + deltaX, getY() + deltaY);
     }
 
     public Point scale(double koef){
-
-        Point scaled = new Point(getX()*koef, getY()*koef);
-
-        return scaled;
+        return new Point(getX()*koef, getY()*koef);
     }
 }
