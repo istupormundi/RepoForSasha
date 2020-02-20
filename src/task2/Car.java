@@ -1,69 +1,89 @@
 package task2;
 
-/*реаализуйте класс Саг, моделирующий передвижение автомобиля на бензиновом топливе по оси х.
- Предоставьте методы для передвижения автомобиля на заданное количество километров,
- заполнения топливного бака заданным количеством литров бензина,
- вычисления расстояния,  пройденного от начала координат, а также уровня топлива в баке.
- Укажите расход топлива (в л/км) в качестве параметра конструктора данного класса.
- */
-
 public class Car {
-    //double fuelConsumption;
-    double tankVolume = 50;
+    double fuelConsumption; // l/km
+    int mileage; // I consider it as initial distance from OX
+    double tankVolume;
     double fuelLevelInTank;
-    double x; // I consider x here as initial distance from OX
 
-    Car(double x, double fuel){
-        this.x = x;
-        this.fuelLevelInTank = fuel;
+    Car(int mileage, double fuelConsumption, double fuelLevelInTank, double tankVolume){
+        this.mileage = mileage;
+        this.fuelConsumption = fuelConsumption;
+        this.fuelLevelInTank = fuelLevelInTank;
+        this.tankVolume = tankVolume;
     }
 
-    //no point to add fuelConsumption to constructor; it's a function of speed
-    private final double calculateFuelConsumption(double speed, double distance){
+    //should be called after each driving
+    private void increaseMileAgeAfterDriving(int km){
+        mileage += km;
+        //System.out.println("mileage: " + mileage);
+    }
 
-        final double vol1 = 5; //l
-        final double vol2  = 10; //l
+    //should be called after each driving
+    private double calculateFuelLevelInTank(int km){
+        //System.out.println("fuelLevelInTank BEFORE driving: " + fuelLevelInTank);
+        fuelLevelInTank = fuelLevelInTank - fuelConsumption * km;
+        //System.out.println("fuelLevelInTank AFTER driving: " + fuelLevelInTank);
 
-        double consumption; // l/km
-        if (speed >= 100){
-            consumption = vol1 / distance;
+        return fuelLevelInTank;
+    }
+
+    private void StopCarIfTankIsEmpty(){
+        System.out.println("STOPPED. FUEL TANK IS EMPTY");
+    }
+
+    private void EstimateTrip(int km){
+        double delta = fuelLevelInTank - fuelConsumption * km;
+        double requiredFuel = fuelConsumption * km;
+        double expectedDistance = fuelLevelInTank / fuelConsumption;
+
+        if (delta > 0 && requiredFuel < tankVolume){
+            System.out.println("W A R N I N G: not enough fuel to the Ktrip");
         }
-        else{
-            consumption = vol2 / distance;
+
+        if (expectedDistance < km) {
+            System.out.println("W A R N I N G: expected distance = " + expectedDistance);
         }
-
-        return consumption;
     }
 
-    public double drive (double speed, double km){
-        return speed / km;
+    public void drive(int km){
+        int currentRun = 0;
+        EstimateTrip(km);
+
+        for (int i = 1; i <= km; i++){
+            currentRun++;
+            double fuel = calculateFuelLevelInTank(i);
+            if (fuel <= 1){
+                StopCarIfTankIsEmpty();
+                System.out.println("W A R N I N G: Refill the tank");
+                break;
+            }
+        }
+        increaseMileAgeAfterDriving(currentRun);
     }
 
-    public double distanceFromOX(double speed, double hours){
-        //this function does not make sense, too, cause we do not know vectors p
-        double km = speed * hours;
-        System.out.println("FAKE distanceFromOX = " + km);
-
-        return km - this.x;
+    public void displayFuelLevel(){
+        System.out.println("CURRENT FUEL LEVEL: " + fuelLevelInTank);
     }
 
-    public double showFuelLevelInTank(double speed, double distance){
-        double spentFuel = calculateFuelConsumption(speed, distance);
-        double currentFuelLevel = this.fuelLevelInTank - spentFuel;
-        System.out.println("currentFuelLevel  = " + currentFuelLevel);
+    //still mostly useless method
+    public double returnDistanceFromOX(){
+        //System.out.println("mileage: " + mileage);
 
-        return currentFuelLevel;
+        return mileage;
     }
 
     public double refillFuelTank(double fuelToAdd){
-        double newFuelLevel =  this.fuelLevelInTank + fuelToAdd;
-
-        if (newFuelLevel > tankVolume){
-            newFuelLevel = 50;
-            System.out.println("OUT OF TANK");
+        //System.out.println("fuelLvelInTank BEFORE refill: " + fuelLevelInTank);
+        //льём по литрику (:
+        for(int i = 1; i <= fuelToAdd; i++){
+            fuelLevelInTank++;
+            if (fuelLevelInTank == tankVolume){
+                break;
+            }
         }
-        System.out.println("Tank was refilled. New Fuel Level is = " + newFuelLevel);
+        //System.out.println("fuelLevelInTank AFTER refill: " + fuelLevelInTank);
 
-        return newFuelLevel;
+        return fuelLevelInTank;
     }
 }
