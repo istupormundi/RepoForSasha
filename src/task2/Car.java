@@ -28,34 +28,35 @@ public class Car {
         return fuelLevelInTank;
     }
 
-    private void stopCarIfTankIsEmpty(){
-        System.out.println("STOPPED. FUEL TANK IS EMPTY");
-    }
-
     private void estimateTrip(int km){
         double delta = fuelLevelInTank - fuelConsumption * km;
         double requiredFuel = fuelConsumption * km;
         double expectedDistance = fuelLevelInTank / fuelConsumption;
 
         if (delta > 0 && requiredFuel < tankVolume){
-            System.out.println("W A R N I N G: not enough fuel to the Ktrip");
+            System.out.println("W A R N I N G: not enough fuel to the trip");
         }
 
         if (expectedDistance < km) {
-            System.out.println("W A R N I N G: expected distance = " + expectedDistance);
+            System.out.println("W A R N I N G: you can drive only " + expectedDistance + " km");
         }
+    }
+
+    public void stopCarIfTankIsEmpty(){
+        System.out.println("STOPPED. FUEL TANK IS EMPTY");
     }
 
     public void drive(int km){
         int currentRun = 0;
         estimateTrip(km);
 
+        //quasi event listener
         for (int i = 1; i <= km; i++){
             currentRun++;
             double fuel = calculateFuelLevelInTank(i);
             if (fuel <= 1){
                 stopCarIfTankIsEmpty();
-                System.out.println("W A R N I N G: Refill the tank");
+                System.out.println("W A R N I N G: !!!Refill the tank!!!");
                 break;
             }
         }
@@ -73,17 +74,16 @@ public class Car {
         return mileage;
     }
 
-    public double refillFuelTank(double fuelToAdd){
-        //System.out.println("fuelLvelInTank BEFORE refill: " + fuelLevelInTank);
-        //льём по литрику (:
+    public void refillFuelTank(double fuelToAdd){
+        //System.out.println("fuelLevelInTank BEFORE refill: " + fuelLevelInTank);
+
+        //льём по литрику (: quasi EventHandler
         for(int i = 1; i <= fuelToAdd; i++){
             fuelLevelInTank++;
-            if (fuelLevelInTank == tankVolume){
+            if (fuelLevelInTank >= tankVolume){
                 break;
             }
         }
         //System.out.println("fuelLevelInTank AFTER refill: " + fuelLevelInTank);
-
-        return fuelLevelInTank;
     }
 }
